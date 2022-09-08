@@ -19,8 +19,23 @@
 					"name": "ExistingCustomers"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DimCustomersDS",
+						"type": "DatasetReference"
+					},
+					"name": "DestCustomers"
+				}
+			],
+			"transformations": [
+				{
+					"name": "MatchCustomers"
+				},
+				{
+					"name": "ConditionalSplitCustomerNotMatched"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          AccountNumber as integer,",
@@ -62,7 +77,53 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table',",
-				"     staged: true) ~> ExistingCustomers"
+				"     staged: true) ~> ExistingCustomers",
+				"SourceCustomers, ExistingCustomers lookup(SourceCustomers@AccountNumber == ExistingCustomers@AccountNumber,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> MatchCustomers",
+				"MatchCustomers split(isNull(ExistingCustomers@AccountNumber) == true(),",
+				"     disjoint: false) ~> ConditionalSplitCustomerNotMatched@(CustomerNotMatched, CustomerMatched)",
+				"ConditionalSplitCustomerNotMatched@CustomerNotMatched sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CustomerPK as integer,",
+				"          AccountNumber as integer,",
+				"          FirstName as string,",
+				"          MiddleInitial as string,",
+				"          LastName as string,",
+				"          Address as string,",
+				"          City as string,",
+				"          State as string,",
+				"          ZipCode as string,",
+				"          NumberOfCarsOwned as integer,",
+				"          HomeOwnerFlag as string,",
+				"          Married as string,",
+				"          NumberOfChildren as integer,",
+				"          InsertedDate as timestamp,",
+				"          UpdatedDate as timestamp,",
+				"          ActiveFlag as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          CustomerPK,",
+				"          AccountNumber = ConditionalSplitCustomerNotMatched@CustomerNotMatched@AccountNumber,",
+				"          FirstName = ConditionalSplitCustomerNotMatched@CustomerNotMatched@FirstName,",
+				"          MiddleInitial = ConditionalSplitCustomerNotMatched@CustomerNotMatched@MiddleInitial,",
+				"          LastName = ConditionalSplitCustomerNotMatched@CustomerNotMatched@LastName,",
+				"          InsertedDate,",
+				"          UpdatedDate,",
+				"          ActiveFlag",
+				"     )) ~> DestCustomers"
 			]
 		}
 	}
