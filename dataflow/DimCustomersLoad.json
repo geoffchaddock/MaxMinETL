@@ -37,6 +37,9 @@
 				},
 				{
 					"name": "SCDColumns"
+				},
+				{
+					"name": "HaveColumnsChanged"
 				}
 			],
 			"scriptLines": [
@@ -89,6 +92,15 @@
 				"     disjoint: false) ~> ConditionalSplitCustomerNotMatched@(CustomerNotMatched, CustomerMatched)",
 				"ConditionalSplitCustomerNotMatched@CustomerNotMatched derive(ActiveFlag = 1,",
 				"          InsertedDate = currentDate()) ~> SCDColumns",
+				"ConditionalSplitCustomerNotMatched@CustomerMatched, ExistingCustomers join(ConditionalSplitCustomerNotMatched@CustomerMatched@AccountNumber == ExistingCustomers@AccountNumber",
+				"     && ConditionalSplitCustomerNotMatched@CustomerMatched@LastName == ExistingCustomers@LastName",
+				"     && ConditionalSplitCustomerNotMatched@CustomerMatched@Address == ExistingCustomers@Address",
+				"     && ConditionalSplitCustomerNotMatched@CustomerMatched@City == ExistingCustomers@City",
+				"     && ConditionalSplitCustomerNotMatched@CustomerMatched@NumberOfCarsOwned == ExistingCustomers@NumberOfCarsOwned,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> HaveColumnsChanged",
 				"SCDColumns sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     input(",
