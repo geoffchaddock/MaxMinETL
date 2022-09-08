@@ -120,7 +120,6 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
-				"          CustomerPK,",
 				"          AccountNumber = ConditionalSplitCustomerNotMatched@CustomerNotMatched@AccountNumber,",
 				"          FirstName = ConditionalSplitCustomerNotMatched@CustomerNotMatched@FirstName,",
 				"          MiddleInitial = ConditionalSplitCustomerNotMatched@CustomerNotMatched@MiddleInitial,",
