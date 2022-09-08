@@ -1,0 +1,69 @@
+{
+	"name": "DimCustomersLoad",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CustomersDS",
+						"type": "DatasetReference"
+					},
+					"name": "SourceCustomers"
+				},
+				{
+					"dataset": {
+						"referenceName": "DimCustomersDS",
+						"type": "DatasetReference"
+					},
+					"name": "ExistingCustomers"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          AccountNumber as integer,",
+				"          FirstName as string,",
+				"          MiddleInitial as string,",
+				"          LastName as string,",
+				"          Address as string,",
+				"          City as string,",
+				"          State as string,",
+				"          ZipCode as string,",
+				"          NumberOfCarsOwned as integer,",
+				"          HomeOwnerFlag as string,",
+				"          Married as string,",
+				"          NumberOfChildren as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> SourceCustomers",
+				"source(output(",
+				"          CustomerPK as integer,",
+				"          AccountNumber as integer,",
+				"          FirstName as string,",
+				"          MiddleInitial as string,",
+				"          LastName as string,",
+				"          Address as string,",
+				"          City as string,",
+				"          State as string,",
+				"          ZipCode as string,",
+				"          NumberOfCarsOwned as integer,",
+				"          HomeOwnerFlag as string,",
+				"          Married as string,",
+				"          NumberOfChildren as integer,",
+				"          InsertedDate as timestamp,",
+				"          UpdatedDate as timestamp,",
+				"          ActiveFlag as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table',",
+				"     staged: true) ~> ExistingCustomers"
+			]
+		}
+	}
+}

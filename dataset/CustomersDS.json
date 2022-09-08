@@ -1,0 +1,68 @@
+{
+	"name": "CustomersDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "OrderProcessingSystem",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AccountNumber",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FirstName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MiddleInitial",
+				"type": "nchar"
+			},
+			{
+				"name": "LastName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Address",
+				"type": "nvarchar"
+			},
+			{
+				"name": "City",
+				"type": "nvarchar"
+			},
+			{
+				"name": "State",
+				"type": "nchar"
+			},
+			{
+				"name": "ZipCode",
+				"type": "nchar"
+			},
+			{
+				"name": "NumberOfCarsOwned",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "HomeOwnerFlag",
+				"type": "char"
+			},
+			{
+				"name": "Married",
+				"type": "char"
+			},
+			{
+				"name": "NumberOfChildren",
+				"type": "smallint",
+				"precision": 5
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Customers"
+		}
+	}
+}

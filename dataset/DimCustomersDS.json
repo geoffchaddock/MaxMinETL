@@ -1,0 +1,90 @@
+{
+	"name": "DimCustomersDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "hedukwhcodeLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "CustomerPK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AccountNumber",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FirstName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MiddleInitial",
+				"type": "nchar"
+			},
+			{
+				"name": "LastName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Address",
+				"type": "nvarchar"
+			},
+			{
+				"name": "City",
+				"type": "nvarchar"
+			},
+			{
+				"name": "State",
+				"type": "nchar"
+			},
+			{
+				"name": "ZipCode",
+				"type": "nchar"
+			},
+			{
+				"name": "NumberOfCarsOwned",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "HomeOwnerFlag",
+				"type": "char"
+			},
+			{
+				"name": "Married",
+				"type": "char"
+			},
+			{
+				"name": "NumberOfChildren",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "InsertedDate",
+				"type": "smalldatetime",
+				"precision": 16,
+				"scale": 0
+			},
+			{
+				"name": "UpdatedDate",
+				"type": "smalldatetime",
+				"precision": 16,
+				"scale": 0
+			},
+			{
+				"name": "ActiveFlag",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DimCustomers"
+		}
+	}
+}
