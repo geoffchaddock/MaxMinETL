@@ -19,6 +19,13 @@
 						"referenceName": "DimCustomersLoad",
 						"type": "DataFlowReference"
 					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "DimCustomerStagingLS",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "maxminetl"
+					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
