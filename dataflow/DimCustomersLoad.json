@@ -34,6 +34,9 @@
 				},
 				{
 					"name": "ConditionalSplitCustomerNotMatched"
+				},
+				{
+					"name": "SCDColumns"
 				}
 			],
 			"scriptLines": [
@@ -84,7 +87,9 @@
 				"     broadcast: 'auto')~> MatchCustomers",
 				"MatchCustomers split(isNull(ExistingCustomers@AccountNumber) == true(),",
 				"     disjoint: false) ~> ConditionalSplitCustomerNotMatched@(CustomerNotMatched, CustomerMatched)",
-				"ConditionalSplitCustomerNotMatched@CustomerNotMatched sink(allowSchemaDrift: true,",
+				"ConditionalSplitCustomerNotMatched@CustomerNotMatched derive(ActiveFlag = 1,",
+				"          InsertedDate = currentDate()) ~> SCDColumns",
+				"SCDColumns sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CustomerPK as integer,",
