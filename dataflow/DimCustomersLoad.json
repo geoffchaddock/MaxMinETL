@@ -43,6 +43,9 @@
 				},
 				{
 					"name": "CreateIsActive"
+				},
+				{
+					"name": "alterRow1"
 				}
 			],
 			"scriptLines": [
@@ -109,6 +112,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameExistingDSColumns",
 				"ConditionalSplitCustomerNotMatched@CustomerMatched derive(IsActive = 0) ~> CreateIsActive",
+				"CreateIsActive alterRow() ~> alterRow1",
 				"SCDColumns sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     input(",
