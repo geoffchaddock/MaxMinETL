@@ -39,10 +39,10 @@
 					"name": "SCDColumns"
 				},
 				{
-					"name": "join1"
+					"name": "RenameExistingDSColumns"
 				},
 				{
-					"name": "RenameExistingDSColumns"
+					"name": "CreateIsActive"
 				}
 			],
 			"scriptLines": [
@@ -95,15 +95,6 @@
 				"     disjoint: false) ~> ConditionalSplitCustomerNotMatched@(CustomerNotMatched, CustomerMatched)",
 				"ConditionalSplitCustomerNotMatched@CustomerNotMatched derive(ActiveFlag = 1,",
 				"          InsertedDate = currentDate()) ~> SCDColumns",
-				"ConditionalSplitCustomerNotMatched@CustomerMatched, RenameExistingDSColumns join(ConditionalSplitCustomerNotMatched@CustomerMatched@AccountNumber == ExistingCustomers@AccountNumber",
-				"     && ConditionalSplitCustomerNotMatched@CustomerMatched@FirstName != ExistingCustomers@FirstName",
-				"     && ConditionalSplitCustomerNotMatched@CustomerMatched@LastName != ExistingCustomers@LastName",
-				"     && ConditionalSplitCustomerNotMatched@CustomerMatched@Address != ExistingCustomers@Address",
-				"     && ConditionalSplitCustomerNotMatched@CustomerMatched@ZipCode != ExistingCustomers@ZipCode,",
-				"     joinType:'left',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1",
 				"ExistingCustomers select(mapColumn(",
 				"          CustomerPKExisting = CustomerPK,",
 				"          AccountNumberExisting = AccountNumber,",
@@ -117,6 +108,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenameExistingDSColumns",
+				"ConditionalSplitCustomerNotMatched@CustomerMatched derive(IsActive = 0) ~> CreateIsActive",
 				"SCDColumns sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     input(",
