@@ -58,7 +58,7 @@
 			}
 		],
 		"typeProperties": {
-			"tableName": "[dbo].[DimEmp]"
+			"tableName": "[dbo].[DimCustomers]"
 		}
 	}
 }
