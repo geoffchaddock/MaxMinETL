@@ -1,5 +1,5 @@
 {
-	"name": "DimEmployeeLoader2",
+	"name": "DumCustomerSCD2Load",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
