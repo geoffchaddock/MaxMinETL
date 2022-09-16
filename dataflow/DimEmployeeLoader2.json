@@ -42,7 +42,7 @@
 						"referenceName": "DimCustomersTmp",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "InsertNewRow"
 				}
 			],
 			"transformations": [
@@ -164,7 +164,8 @@
 				"          HomeOwnerFlag = Customers@HomeOwnerFlag,",
 				"          NumberOfChildren = TypeConversionsAndSetAttrs@NumberOfChildren,",
 				"          Married = DimCustomers@Married,",
-				"          iscurrent = ActiveFlag",
+				"          iscurrent = ActiveFlag,",
+				"          InsertedDate",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> NormNames",
@@ -183,11 +184,14 @@
 				"          MiddleName,",
 				"          LastName,",
 				"          Address,",
+				"          City,",
+				"          State,",
 				"          ZipCode,",
 				"          NumberOfCarsOwned,",
 				"          NumberOfChildren,",
 				"          HomeOwnerFlag,",
 				"          Married,",
+				"          InsertedDate,",
 				"          iscurrent",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
@@ -263,7 +267,7 @@
 				"          HomeOwnerFlag,",
 				"          Married,",
 				"          NumberOfChildren,",
-				"          InsertedDate = InsertDate,",
+				"          InsertedDate,",
 				"          ActiveFlag = iscurrent",
 				"     )) ~> NewRows",
 				"SetAttrsUpdate sink(allowSchemaDrift: true,",
@@ -297,13 +301,19 @@
 				"     mapColumn(",
 				"          AccountNumber,",
 				"          FirstName,",
+				"          MiddleInitial = MiddleName,",
 				"          LastName,",
 				"          Address,",
+				"          City,",
+				"          State,",
 				"          ZipCode,",
 				"          NumberOfCarsOwned,",
+				"          HomeOwnerFlag,",
 				"          Married,",
-				"          NumberOfChildren",
-				"     )) ~> sink1"
+				"          NumberOfChildren,",
+				"          InsertedDate,",
+				"          ActiveFlag = iscurrent",
+				"     )) ~> InsertNewRow"
 			]
 		}
 	}
