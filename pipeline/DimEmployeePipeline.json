@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "DimEmployeeLoader2",
+						"referenceName": "DumCustomerSCD2Load",
 						"type": "DataFlowReference"
 					},
 					"compute": {
