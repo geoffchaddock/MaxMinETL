@@ -147,7 +147,7 @@
 				"     negate:false,",
 				"     broadcast: 'auto')~> checkForChanges",
 				"ConditionalSplit1@NewRow derive(iscurrent = 1,",
-				"          InsertDate = currentTimestamp()) ~> SetAttrsForNew",
+				"          InsertedDate = currentTimestamp()) ~> SetAttrsForNew",
 				"checkForChanges derive(iscurrent = 0,",
 				"          UpdatedDate = currentTimestamp()) ~> SetAttrsInactive",
 				"checkForChanges derive(iscurrent = 1) ~> SetAttrsUpdate",
