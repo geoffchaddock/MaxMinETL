@@ -24,14 +24,6 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DimEmp",
-						"type": "DatasetReference"
-					},
-					"name": "sinkInactive",
-					"description": " Age out old rows"
-				},
-				{
-					"dataset": {
 						"referenceName": "DimCustomersTmp",
 						"type": "DatasetReference"
 					},
@@ -43,6 +35,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "InsertNewRow"
+				},
+				{
+					"dataset": {
+						"referenceName": "DimCustomersTmp",
+						"type": "DatasetReference"
+					},
+					"name": "ArchiveOldRow"
 				}
 			],
 			"transformations": [
@@ -78,7 +77,7 @@
 					"name": "InactiveFields"
 				},
 				{
-					"name": "AlterRow1"
+					"name": "ArchiveCustomerRec"
 				},
 				{
 					"name": "NullFilter",
@@ -130,7 +129,7 @@
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> DimCustomers",
 				"DimCustomers derive(AccountNumber = toInteger(AccountNumber),",
-				"          surrogatekey = toInteger(CustomerPK)) ~> TypeConversions",
+				"          CustomerPK = toInteger(CustomerPK)) ~> TypeConversions",
 				"NullFilter derive(AccountNumber = toInteger(AccountNumber),",
 				"          NumberOfCarsOwned = toInteger(NumberOfCarsOwned),",
 				"          NumberOfChildren = toInteger(NumberOfChildren)) ~> TypeConversionsAndSetAttrs",
@@ -149,7 +148,8 @@
 				"     broadcast: 'auto')~> checkForChanges",
 				"ConditionalSplit1@NewRow derive(iscurrent = 1,",
 				"          InsertDate = currentTimestamp()) ~> SetAttrsForNew",
-				"checkForChanges derive(iscurrent = 0) ~> SetAttrsInactive",
+				"checkForChanges derive(iscurrent = 0,",
+				"          UpdatedDate = currentTimestamp()) ~> SetAttrsInactive",
 				"checkForChanges derive(iscurrent = 1) ~> SetAttrsUpdate",
 				"LookupIDs select(mapColumn(",
 				"          AccountNumber = TypeConversionsAndSetAttrs@AccountNumber,",
@@ -172,11 +172,11 @@
 				"SetAttrsInactive select(mapColumn(",
 				"          AccountNumber,",
 				"          iscurrent,",
-				"          processtime",
+				"          UpdatedDate",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> InactiveFields",
-				"InactiveFields alterRow(updateIf(true())) ~> AlterRow1",
+				"InactiveFields alterRow(updateIf(true())) ~> ArchiveCustomerRec",
 				"Customers filter(!isNull(AccountNumber)) ~> NullFilter",
 				"ConditionalSplit1@CheckForUpdates select(mapColumn(",
 				"          AccountNumber,",
@@ -196,36 +196,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> NameNorm2",
-				"AlterRow1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     input(",
-				"          EmpID as integer,",
-				"          surrogatekey as string,",
-				"          Region as string,",
-				"          Status as string,",
-				"          EmpFunction as string,",
-				"          Level as string,",
-				"          Role as string,",
-				"          StartDate as date,",
-				"          EndDate as date,",
-				"          iscurrent as integer,",
-				"          processtime as timestamp",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:false,",
-				"     updateable:true,",
-				"     upsertable:false,",
-				"     keys:['EmpID'],",
-				"     format: 'table',",
-				"     batchSize: 50,",
-				"     errorHandlingOption: 'stopOnFirstError',",
-				"     mapColumn(",
-				"          EmpID = AccountNumber,",
-				"          EndDate,",
-				"          iscurrent,",
-				"          processtime",
-				"     ),",
-				"     partitionBy('roundRobin', 4)) ~> sinkInactive",
 				"SetAttrsForNew sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -313,7 +283,41 @@
 				"          NumberOfChildren,",
 				"          InsertedDate,",
 				"          ActiveFlag = iscurrent",
-				"     )) ~> InsertNewRow"
+				"     )) ~> InsertNewRow",
+				"ArchiveCustomerRec sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CustomerPK as integer,",
+				"          AccountNumber as integer,",
+				"          FirstName as string,",
+				"          MiddleInitial as string,",
+				"          LastName as string,",
+				"          Address as string,",
+				"          City as string,",
+				"          State as string,",
+				"          ZipCode as string,",
+				"          NumberOfCarsOwned as integer,",
+				"          HomeOwnerFlag as string,",
+				"          Married as string,",
+				"          NumberOfChildren as integer,",
+				"          InsertedDate as timestamp,",
+				"          UpdatedDate as timestamp,",
+				"          ActiveFlag as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['AccountNumber'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          AccountNumber,",
+				"          UpdatedDate,",
+				"          ActiveFlag = iscurrent",
+				"     )) ~> ArchiveOldRow"
 			]
 		}
 	}
