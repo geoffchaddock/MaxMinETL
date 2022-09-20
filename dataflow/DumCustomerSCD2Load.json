@@ -309,7 +309,7 @@
 				"     insertable:false,",
 				"     updateable:true,",
 				"     upsertable:false,",
-				"     keys:['AccountNumber','ActiveFlag'],",
+				"     keys:['AccountNumber'],",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
