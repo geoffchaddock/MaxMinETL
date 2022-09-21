@@ -57,7 +57,7 @@
 				"          NumberOfChildren = toInteger(NumberOfChildren),",
 				"          InsertDate = currentTimestamp(),",
 				"          ActiveFlag = 1) ~> TypeConversionsAndSetAttrs",
-				"TypeConversionsAndSetAttrs alterRow(updateIf(true())) ~> alterRow1",
+				"TypeConversionsAndSetAttrs alterRow(upsertIf(true())) ~> alterRow1",
 				"alterRow1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
