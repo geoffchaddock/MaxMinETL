@@ -19,6 +19,13 @@
 						"referenceName": "DumCustomerSCD2Load",
 						"type": "DataFlowReference"
 					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "AzureBlobStorage1",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "maxminetl"
+					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
