@@ -29,9 +29,6 @@
 			"transformations": [
 				{
 					"name": "TypeConversionsAndSetAttrs"
-				},
-				{
-					"name": "UpdatedData"
 				}
 			],
 			"scriptLines": [
@@ -57,9 +54,7 @@
 				"          NumberOfChildren = toInteger(NumberOfChildren),",
 				"          InsertDate = currentTimestamp(),",
 				"          ActiveFlag = 1) ~> TypeConversionsAndSetAttrs",
-				"TypeConversionsAndSetAttrs alterRow(updateIf(true()),",
-				"     insertIf(true())) ~> UpdatedData",
-				"UpdatedData sink(allowSchemaDrift: true,",
+				"TypeConversionsAndSetAttrs sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CustomerPK as integer,",
