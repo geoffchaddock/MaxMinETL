@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "EmployeeFiles",
+						"referenceName": "CustomersDS",
 						"type": "DatasetReference"
 					},
 					"name": "Customers",
@@ -19,29 +19,36 @@
 					},
 					"name": "DimCustomers",
 					"description": "Current rows in DimEmployees DW table"
+				},
+				{
+					"name": "source1"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DimCustomersTmp",
-						"type": "DatasetReference"
-					},
-					"name": "NewRows"
-				},
-				{
-					"dataset": {
-						"referenceName": "DimCustomersTmp",
+						"referenceName": "DimCustomersDS",
 						"type": "DatasetReference"
 					},
 					"name": "InsertNewRow"
 				},
 				{
 					"dataset": {
-						"referenceName": "DimCustomersTmp",
+						"referenceName": "DimCustomersDS",
 						"type": "DatasetReference"
 					},
 					"name": "ArchiveOldRow"
+				},
+				{
+					"dataset": {
+						"referenceName": "DimCustomersDS",
+						"type": "DatasetReference"
+					},
+					"name": "InsertNewRecs",
+					"rejectedDataLinkedService": {
+						"referenceName": "AzureBlobStorage1",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [
@@ -89,7 +96,7 @@
 			],
 			"scriptLines": [
 				"source(output(",
-				"          AccountNumber as string,",
+				"          AccountNumber as integer,",
 				"          FirstName as string,",
 				"          MiddleInitial as string,",
 				"          LastName as string,",
@@ -97,14 +104,15 @@
 				"          City as string,",
 				"          State as string,",
 				"          ZipCode as string,",
-				"          NumberOfCarsOwned as string,",
+				"          NumberOfCarsOwned as integer,",
 				"          HomeOwnerFlag as string,",
 				"          Married as string,",
-				"          NumberOfChildren as string",
+				"          NumberOfChildren as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> Customers",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> Customers",
 				"source(output(",
 				"          CustomerPK as integer,",
 				"          AccountNumber as integer,",
@@ -127,6 +135,8 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> DimCustomers",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source1",
 				"DimCustomers derive(AccountNumber = toInteger(AccountNumber),",
 				"          CustomerPK = toInteger(CustomerPK)) ~> TypeConversions",
 				"NullFilter derive(AccountNumber = toInteger(AccountNumber),",
@@ -196,50 +206,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> NameNorm2",
-				"SetAttrsForNew sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     input(",
-				"          CustomerPK as integer,",
-				"          AccountNumber as integer,",
-				"          FirstName as string,",
-				"          MiddleInitial as string,",
-				"          LastName as string,",
-				"          Address as string,",
-				"          City as string,",
-				"          State as string,",
-				"          ZipCode as string,",
-				"          NumberOfCarsOwned as integer,",
-				"          HomeOwnerFlag as string,",
-				"          Married as string,",
-				"          NumberOfChildren as integer,",
-				"          InsertedDate as timestamp,",
-				"          UpdatedDate as timestamp,",
-				"          ActiveFlag as integer",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError',",
-				"     mapColumn(",
-				"          AccountNumber,",
-				"          FirstName,",
-				"          MiddleInitial = MiddleName,",
-				"          LastName,",
-				"          Address,",
-				"          City,",
-				"          State,",
-				"          ZipCode,",
-				"          NumberOfCarsOwned,",
-				"          HomeOwnerFlag,",
-				"          Married,",
-				"          NumberOfChildren,",
-				"          InsertedDate,",
-				"          ActiveFlag = iscurrent",
-				"     )) ~> NewRows",
 				"SetAttrsUpdate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -265,6 +231,7 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
+				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
@@ -308,8 +275,9 @@
 				"     insertable:false,",
 				"     updateable:true,",
 				"     upsertable:false,",
-				"     keys:['AccountNumber','UpdatedDate'],",
+				"     keys:['AccountNumber'],",
 				"     format: 'table',",
+				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
@@ -317,7 +285,52 @@
 				"          AccountNumber,",
 				"          UpdatedDate,",
 				"          ActiveFlag = iscurrent",
-				"     )) ~> ArchiveOldRow"
+				"     )) ~> ArchiveOldRow",
+				"SetAttrsForNew sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CustomerPK as integer,",
+				"          AccountNumber as integer,",
+				"          FirstName as string,",
+				"          MiddleInitial as string,",
+				"          LastName as string,",
+				"          Address as string,",
+				"          City as string,",
+				"          State as string,",
+				"          ZipCode as string,",
+				"          NumberOfCarsOwned as integer,",
+				"          HomeOwnerFlag as string,",
+				"          Married as string,",
+				"          NumberOfChildren as integer,",
+				"          InsertedDate as timestamp,",
+				"          UpdatedDate as timestamp,",
+				"          ActiveFlag as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          AccountNumber,",
+				"          FirstName,",
+				"          LastName,",
+				"          Address,",
+				"          City,",
+				"          State,",
+				"          ZipCode,",
+				"          NumberOfCarsOwned,",
+				"          HomeOwnerFlag,",
+				"          Married,",
+				"          NumberOfChildren,",
+				"          InsertedDate,",
+				"          ActiveFlag = iscurrent",
+				"     )) ~> InsertNewRecs"
 			]
 		}
 	}
