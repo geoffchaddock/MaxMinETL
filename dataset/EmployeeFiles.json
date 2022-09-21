@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Customer.csv",
+				"fileName": "Customers.csv",
 				"container": "maxminetl"
 			},
 			"columnDelimiter": ",",
