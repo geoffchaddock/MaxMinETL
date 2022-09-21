@@ -82,7 +82,7 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:true,",
-				"     keys:['AccountNumber'],",
+				"     keys:['FirstName'],",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
