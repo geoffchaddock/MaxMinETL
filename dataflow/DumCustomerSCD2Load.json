@@ -14,18 +14,11 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "Delete",
+						"referenceName": "DimCustomersDS",
 						"type": "DatasetReference"
 					},
 					"name": "DimCustomers",
 					"description": "Current rows in DimEmployees DW table"
-				},
-				{
-					"dataset": {
-						"referenceName": "DimCustomersDS",
-						"type": "DatasetReference"
-					},
-					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -138,30 +131,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> DimCustomers",
-				"source(output(",
-				"          CustomerPK as integer,",
-				"          AccountNumber as integer,",
-				"          FirstName as string,",
-				"          MiddleInitial as string,",
-				"          LastName as string,",
-				"          Address as string,",
-				"          City as string,",
-				"          State as string,",
-				"          ZipCode as string,",
-				"          NumberOfCarsOwned as integer,",
-				"          HomeOwnerFlag as string,",
-				"          Married as string,",
-				"          NumberOfChildren as integer,",
-				"          InsertedDate as timestamp,",
-				"          UpdatedDate as timestamp,",
-				"          ActiveFlag as integer",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table',",
-				"     staged: true) ~> source1",
+				"     staged: true) ~> DimCustomers",
 				"DimCustomers derive(AccountNumber = toInteger(AccountNumber),",
 				"          CustomerPK = toInteger(CustomerPK)) ~> TypeConversions",
 				"NullFilter derive(AccountNumber = toInteger(AccountNumber),",
