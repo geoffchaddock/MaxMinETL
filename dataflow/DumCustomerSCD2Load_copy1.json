@@ -1,0 +1,106 @@
+{
+	"name": "DumCustomerSCD2Load_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "EmployeeFiles",
+						"type": "DatasetReference"
+					},
+					"name": "Customers",
+					"description": " Source employees file, changes every day"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DimCustomersTmp",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "TypeConversionsAndSetAttrs"
+				},
+				{
+					"name": "UpdatedData"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          AccountNumber as string,",
+				"          FirstName as string,",
+				"          MiddleInitial as string,",
+				"          LastName as string,",
+				"          Address as string,",
+				"          City as string,",
+				"          State as string,",
+				"          ZipCode as string,",
+				"          NumberOfCarsOwned as string,",
+				"          HomeOwnerFlag as string,",
+				"          Married as string,",
+				"          NumberOfChildren as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true) ~> Customers",
+				"Customers derive(AccountNumber = toInteger(AccountNumber),",
+				"          NumberOfCarsOwned = toInteger(NumberOfCarsOwned),",
+				"          NumberOfChildren = toInteger(NumberOfChildren),",
+				"          InsertDate = currentTimestamp(),",
+				"          ActiveFlag = 1) ~> TypeConversionsAndSetAttrs",
+				"TypeConversionsAndSetAttrs alterRow(updateIf(true())) ~> UpdatedData",
+				"UpdatedData sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CustomerPK as integer,",
+				"          AccountNumber as integer,",
+				"          FirstName as string,",
+				"          MiddleInitial as string,",
+				"          LastName as string,",
+				"          Address as string,",
+				"          City as string,",
+				"          State as string,",
+				"          ZipCode as string,",
+				"          NumberOfCarsOwned as integer,",
+				"          HomeOwnerFlag as string,",
+				"          Married as string,",
+				"          NumberOfChildren as integer,",
+				"          InsertedDate as timestamp,",
+				"          UpdatedDate as timestamp,",
+				"          ActiveFlag as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['AccountNumber'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          AccountNumber,",
+				"          FirstName,",
+				"          MiddleInitial,",
+				"          LastName,",
+				"          Address,",
+				"          City,",
+				"          State,",
+				"          ZipCode,",
+				"          NumberOfCarsOwned,",
+				"          HomeOwnerFlag,",
+				"          Married,",
+				"          NumberOfChildren,",
+				"          InsertedDate = InsertDate,",
+				"          ActiveFlag",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
