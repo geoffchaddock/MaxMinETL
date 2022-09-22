@@ -25,6 +25,12 @@
 					"dataflow": {
 						"referenceName": "DumCustomerSCD2Load",
 						"type": "DataFlowReference",
+						"parameters": {
+							"CustomersTable": {
+								"value": "'@{pipeline().parameters.CustomerTable}'",
+								"type": "Expression"
+							}
+						},
 						"datasetParameters": {
 							"Customers": {
 								"CustomersTable": {
@@ -66,7 +72,7 @@
 				"typeProperties": {
 					"variableName": "CustomerTable",
 					"value": {
-						"value": "\"Customers\"",
+						"value": "Customers",
 						"type": "Expression"
 					}
 				}
