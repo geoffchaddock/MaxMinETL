@@ -15,10 +15,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "DimCustomersLoad",
-						"type": "DataFlowReference"
-					},
 					"staging": {
 						"linkedService": {
 							"referenceName": "DimCustomerStagingLS",
