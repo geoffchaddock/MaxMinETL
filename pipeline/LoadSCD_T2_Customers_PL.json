@@ -1,5 +1,5 @@
 {
-	"name": "Pipeline 2",
+	"name": "LoadSCD_T2_Customers_PL",
 	"properties": {
 		"activities": [
 			{
@@ -7,7 +7,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "Set CustomerTable variable",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -65,7 +65,7 @@
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "Set CustomerTable variable",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -79,7 +79,7 @@
 				"typeProperties": {
 					"variableName": "CustomerTable",
 					"value": {
-						"value": "@string(activity('LookupConfigTableValue').output.firstRow.RunSeqNo)\r\n\r\n",
+						"value": "@string(activity('LookupConfigTableValue').output.firstRow.ConfigDescValue)\n\n",
 						"type": "Expression"
 					}
 				}
