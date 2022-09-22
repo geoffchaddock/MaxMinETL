@@ -5,6 +5,11 @@
 			"referenceName": "OrderProcessingSystem",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"CustomersTable": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
@@ -62,7 +67,10 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Customers"
+			"table": {
+				"value": "@dataset().CustomersTable",
+				"type": "Expression"
+			}
 		}
 	}
 }
