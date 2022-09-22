@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "LoadSCD_T2_Customers",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {

@@ -95,6 +95,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     CustomerFileName as string",
+				"}",
 				"source(output(",
 				"          AccountNumber as integer,",
 				"          FirstName as string,",
