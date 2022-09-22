@@ -96,7 +96,7 @@
 			],
 			"scriptLines": [
 				"parameters{",
-				"     CustomersTable as string ('')",
+				"     CustomersTable as string ($CustomersTable)",
 				"}",
 				"source(output(",
 				"          AccountNumber as integer,",
