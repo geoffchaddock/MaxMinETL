@@ -1,0 +1,30 @@
+{
+	"name": "ConfigTableDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "OrderProcessingSystem",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ConfigPK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ConfigDesc",
+				"type": "varchar"
+			},
+			{
+				"name": "ConfigDescValue",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Config"
+		}
+	}
+}
