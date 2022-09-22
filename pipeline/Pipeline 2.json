@@ -5,7 +5,14 @@
 			{
 				"name": "LoadSCD_T2_Customers",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -17,7 +24,25 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "DumCustomerSCD2Load",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"Customers": {
+								"CustomersTable": {
+									"value": "@variables('CustomerTable')",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceParameters": {
+							"Customers": {
+								"schemaLinkedService": {
+									"CustomersTable": {
+										"value": "@variables('CustomerTable')",
+										"type": "Expression"
+									}
+								}
+							}
+						}
 					},
 					"staging": {
 						"linkedService": {
@@ -32,8 +57,31 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "CustomerTable",
+					"value": {
+						"value": "\"Customers\"",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"parameters": {
+			"CustomerTable": {
+				"type": "String"
+			}
+		},
+		"variables": {
+			"CustomerTable": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
