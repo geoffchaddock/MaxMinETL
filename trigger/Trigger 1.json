@@ -8,6 +8,9 @@
 				"pipelineReference": {
 					"referenceName": "LoadSCD_T2_Customers_PL",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"CustomerTable": "Customer"
 				}
 			}
 		],
