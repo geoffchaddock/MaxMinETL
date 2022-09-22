@@ -69,7 +69,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Get Metadata1",
+						"activity": "LookupConfigTableValue",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -79,14 +79,14 @@
 				"typeProperties": {
 					"variableName": "CustomerTable",
 					"value": {
-						"value": "Customers",
+						"value": "@string(activity('LookupConfigTableValue').output.firstRow.RunSeqNo)\r\n\r\n",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "Get Metadata1",
-				"type": "GetMetadata",
+				"name": "LookupConfigTableValue",
+				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -97,11 +97,16 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select ConfigDescValue from dbo.Config where ConfigDesc = 'SourceTable'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
 					"dataset": {
 						"referenceName": "ConfigTableDS",
 						"type": "DatasetReference"
-					},
-					"fieldList": []
+					}
 				}
 			}
 		],
