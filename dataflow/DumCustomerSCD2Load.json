@@ -95,9 +95,6 @@
 				}
 			],
 			"scriptLines": [
-				"parameters{",
-				"     CustomerFileName as string",
-				"}",
 				"source(output(",
 				"          AccountNumber as integer,",
 				"          FirstName as string,",
@@ -115,7 +112,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> Customers",
+				"     query: 'select * from dbo.Customersx',",
+				"     format: 'query') ~> Customers",
 				"source(output(",
 				"          CustomerPK as integer,",
 				"          AccountNumber as integer,",
