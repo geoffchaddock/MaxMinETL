@@ -146,7 +146,7 @@
 				"     broadcast: 'auto')~> LookupIDs",
 				"NormNames split(isNull(iscurrent),",
 				"     disjoint: false) ~> ConditionalSplit1@(NewRow, CheckForUpdates)",
-				"NameNorm2, filterOnlyActiveRows exists((toInteger(NameNorm2@AccountNumber) == toInteger(TypeConversions@AccountNumber)) && \r",
+				"NameNorm2, filterOnlyActiveRows exists(MiddleName(toInteger(NameNorm2@AccountNumber) == toInteger(filterOnlyActiveRows@AccountNumber)) && \r",
 				"(ActiveFlag == 1) &&\r",
 				"(\r",
 				"   (NameNorm2@NumberOfCarsOwned != DimCustomers@NumberOfCarsOwned) || \r",
