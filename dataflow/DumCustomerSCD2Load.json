@@ -112,7 +112,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'select * from dbo.Customersx',",
+				"     query: 'select * from dbo.Customers',",
 				"     format: 'query') ~> Customers",
 				"source(output(",
 				"          CustomerPK as integer,",
