@@ -89,6 +89,9 @@
 				},
 				{
 					"name": "NameNorm2"
+				},
+				{
+					"name": "filterOnlyActiveRows"
 				}
 			],
 			"scriptLines": [
@@ -138,7 +141,7 @@
 				"NullFilter derive(AccountNumber = toInteger(AccountNumber),",
 				"          NumberOfCarsOwned = toInteger(NumberOfCarsOwned),",
 				"          NumberOfChildren = toInteger(NumberOfChildren)) ~> TypeConversionsAndSetAttrs",
-				"TypeConversionsAndSetAttrs, TypeConversions lookup(TypeConversionsAndSetAttrs@AccountNumber == TypeConversions@AccountNumber,",
+				"TypeConversionsAndSetAttrs, filterOnlyActiveRows lookup(TypeConversionsAndSetAttrs@AccountNumber == TypeConversions@AccountNumber,",
 				"     multiple: true,",
 				"     broadcast: 'auto')~> LookupIDs",
 				"NormNames split(isNull(iscurrent),",
@@ -202,6 +205,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> NameNorm2",
+				"TypeConversions filter(ActiveFlag == 1) ~> filterOnlyActiveRows",
 				"SetAttrsUpdate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
