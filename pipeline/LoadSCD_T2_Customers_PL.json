@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "DumCustomerSCD2Load",
+						"referenceName": "DimEmployeePipeline",
 						"type": "DataFlowReference",
 						"parameters": {
 							"CustomersTable": {
@@ -36,16 +36,6 @@
 								"CustomersTable": {
 									"value": "@variables('CustomerTable')",
 									"type": "Expression"
-								}
-							}
-						},
-						"linkedServiceParameters": {
-							"Customers": {
-								"schemaLinkedService": {
-									"CustomersTable": {
-										"value": "@variables('CustomerTable')",
-										"type": "Expression"
-									}
 								}
 							}
 						}
