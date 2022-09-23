@@ -2,18 +2,8 @@
 	"name": "Trigger 1",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "LoadSCD_T2_Customers_PL",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"CustomerTable": "Customer"
-				}
-			}
-		],
+		"runtimeState": "Stopped",
+		"pipelines": [],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/maxminetl/blobs/",
